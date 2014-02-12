@@ -18,7 +18,6 @@ public class BouncyBitcoinModel {
 	    	Random rand = new Random();
 	    	
 	    	float nextSpeed = rand.nextFloat() * (maxX - minX) + minX;
-	    	Log.i(TAG, "rebound is: " + nextSpeed);
 	    	return nextSpeed;
 		}
 		
@@ -63,7 +62,6 @@ public class BouncyBitcoinModel {
 	    	Random rand = new Random();
 	    	
 	    	float nextRebound = rand.nextFloat() * (maxX - minX) + minX;
-	    	Log.i(TAG, "rebound is: " + nextRebound);
 	    	return nextRebound;
 	    }
 		

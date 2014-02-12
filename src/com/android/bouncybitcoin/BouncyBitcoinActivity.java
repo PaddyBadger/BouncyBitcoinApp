@@ -15,13 +15,15 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.app.Activity;
-import android.view.Menu;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 
 @SuppressWarnings("depreciation")
 public class BouncyBitcoinActivity extends Activity implements Callback, SensorListener{
+	private static final String TAG= "BBA";
 	private static final int BALL_RADIUS=15;
 	private SurfaceView surface;
 	private SurfaceHolder holder;
