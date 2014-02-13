@@ -1,34 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragmentContainer"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center"
     >
-    
-    <Button
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:id="@+id/sensor_list_btn"
-    	android:text="SENSOR LIST"/>
-
-    <Button
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:id="@+id/accelerometer_btn"
-    	android:text="ACCELEROMETER"/>
     	
     <Button
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:id="@+id/bouncing_ball_btn"
     	android:text="BOUNCING BALL"/>  
-    
+    	
     <TextView 
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 		android:id="@+id/priceView" />
     
+    <SurfaceView 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:id="@+id/bouncy_bitcoin_surface" />
+  
 </LinearLayout>
 

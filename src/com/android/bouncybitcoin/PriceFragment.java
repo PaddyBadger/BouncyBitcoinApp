@@ -25,7 +25,6 @@ public class PriceFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		setupAdapter();
-		
 		return null;
 	}
 	
@@ -39,7 +38,7 @@ public class PriceFragment extends Fragment {
 	private class FetchPriceTask extends AsyncTask<Void,Void,String> {
 		@Override
 		protected void onPostExecute(String result) {
-			((Home) getActivity()).displayPrice(result);
+			((BouncyBitcoinActivity) getActivity()).displayPrice(result);
 		}
 		
 		@Override

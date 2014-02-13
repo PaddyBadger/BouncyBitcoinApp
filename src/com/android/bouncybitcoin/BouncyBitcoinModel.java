@@ -3,7 +3,10 @@ package com.android.bouncybitcoin;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
+import android.content.Context;
+import android.graphics.Paint;
 import android.os.Vibrator;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 public class BouncyBitcoinModel {
@@ -23,12 +26,20 @@ public class BouncyBitcoinModel {
 		
 		private final int ballRadius;
 		
+		public final Paint ballPaint;
+		
 		// these are public, so make sure you synchronize on LOCK 
 		// when reading these. I made them public since you need to
 		// get both X and Y in pairs, and this is more efficient than
 		// getter methods. With two getters, you'd still need to 
 		// synchronize.
 		public float ballPixelX, ballPixelY;
+		
+		private int moveToX, moveToY;
+		
+		private boolean doesMove = false;
+		
+		private static final float textAttraction = 0.03F;
 		
 		private int pixelWidth, pixelHeight;
 		
@@ -57,7 +68,7 @@ public class BouncyBitcoinModel {
 	     */
 		private static final float rebound() {
 	    	float minX = 0.3f;
-	    	float maxX = 0.9f;
+	    	float maxX = 0.6f;
 	    	
 	    	Random rand = new Random();
 	    	
@@ -65,14 +76,30 @@ public class BouncyBitcoinModel {
 	    	return nextRebound;
 	    }
 		
-		public BouncyBitcoinModel(int ballRadius) {
+		public final float displayWidth() {
+			return pixelWidth / 2.4f;
+		}
+		
+		public void setMove(int mX, int mY) {
+			this.doesMove = true;
+			this.moveToX = mX;
+			this.moveToY = mY;
+		}
+		
+		public BouncyBitcoinModel(int ballRadius, Paint ballPaint) {
 			this.ballRadius = ballRadius;
+			this.ballPaint = ballPaint;
 		}
 		
 		public void setAccel(float ax, float ay) {
 			synchronized (LOCK) {
-				this.accelX = ax;
-				this.accelY = ay;
+				if (this.doesMove) {
+					this.accelX = (ax / 500) + textAttraction*(moveToY+displayWidth() - ballPixelX); // refector to constants
+					this.accelY = (ay / 500) - textAttraction*(800-(moveToX+20)*8/11 - ballPixelY);
+				} else {
+					this.accelX = ax;
+					this.accelY = ay;
+				}
 			}
 		}
 		
@@ -136,7 +163,7 @@ public class BouncyBitcoinModel {
 	        // end result is meters / second
 	        lVx += ((elapsedMs * lAx) / 1000) * pixelsPerMeter();
 	        lVy += ((elapsedMs * lAy) / 1000) * pixelsPerMeter();
-
+	        
 	        // update the position
 	        // (velocity is meters/sec, so divide by 1000 again)
 	        lBallX += ((lVx * elapsedMs) / 1000) * pixelsPerMeter();
@@ -144,7 +171,10 @@ public class BouncyBitcoinModel {
 	        
 	        boolean bouncedX = false;
 	        boolean bouncedY = false;
-
+	        if (this.doesMove){
+	        	lVx = lVx / 1.02f; 
+	        	lVy = lVy / 1.02f;
+	        }
 	        if (lBallY - ballRadius < 0) {
 	            lBallY = ballRadius;
 	            lVy = -lVy * rebound();
