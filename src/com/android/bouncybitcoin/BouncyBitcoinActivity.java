@@ -18,6 +18,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,13 +45,17 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	private Random rand = new Random();
 	
 	public Fragment createFragment() {
-		return new PriceFragment();
+		
+		Fragment currencyFragment = new PriceFragment();
+		return currencyFragment;	
 	}
+	
+	
 	
 	public final int displayHeight() {
 		DisplayMetrics d = this.getResources().getDisplayMetrics();
 		int screenHeight = d.heightPixels;
-		return screenHeight / 7;
+		return screenHeight;
 	}
 	
 	 public void displayPrice(String price) {
@@ -62,7 +67,7 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	    			 int[][] coords = nA.ballCoords(segments[j]);
 	    			 for (int k = 0; k < coords.length; k++) {
 	    				 BouncyBitcoinModel ball = new BouncyBitcoinModel(BALL_RADIUS, ballPaint);
-	    				 ball.setMove(coords[k][0] + displayHeight() * i, coords[k][1]); 
+	    				 ball.setMove(coords[k][0] + (displayHeight() / (price.length() + 2)+20) * i, coords[k][1]); 
 					 ball.moveBall(rand.nextInt(SurfaceWidth), rand.nextInt(SurfaceHeight));
 					 ball.setSize(SurfaceWidth, SurfaceHeight);
 					 models.add(ball); 
@@ -83,6 +88,10 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		
+		PriceFragment fragment = (PriceFragment)singleFragment;
+		fragment.fetchPriceInCurrency(intent.getStringExtra("Currency code"));
 		
 		setContentView(R.layout.home);
 		this.ballNumber = 0;

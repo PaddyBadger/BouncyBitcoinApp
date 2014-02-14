@@ -23,13 +23,11 @@ import android.util.Log;
 public class PriceFetcher {
 	public static final String TAG="PriceFetcher";
 	
-	private static final String USD = "https://api.bitcoinaverage.com/ticker/USD";
-	// private static final String GBP = "https://api.bitcoinaverage.com/ticker/GBP";
-	// private static final String CNY = "https://api.bitcoinaverage.com/ticker/CNY";
-	// private static final String EUR = "https://api.bitcoinaverage.com/ticker/EUR";
+	private static final String priceURL = "https://api.bitcoinaverage.com/ticker/";
 	private static final String JSON_PRICE = "price";
 	
 	byte[] getUrlBytes(String urlSpec) throws IOException {
+
 		URL url = new URL(urlSpec);
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		
@@ -56,10 +54,12 @@ public class PriceFetcher {
 		return new String(getUrlBytes(urlSpec));
 	}
 	
-	public String fetchPrice() {
+	public String fetchPrice(String currency) {
+		
 		String last;
 		try {
-			String url = Uri.parse(USD).buildUpon().build().toString();
+			
+			String url = Uri.parse(priceURL + currency).buildUpon().build().toString();
 			String jsonString = getUrl(url);
 			Log.i(TAG, "Received " + jsonString);
 			

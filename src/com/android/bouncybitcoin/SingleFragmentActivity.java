@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 public abstract class SingleFragmentActivity extends FragmentActivity {
+	protected Fragment singleFragment;
+
 	protected abstract Fragment createFragment();
 	
 	protected int getLayoutResId() {
@@ -24,7 +26,10 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
 			fm.beginTransaction()
 			.add(R.id.fragmentContainer,  fragment)
 			.commit();
+			
+			
 		}
+		this.singleFragment = fragment;
 	}
 
 }

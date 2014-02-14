@@ -32,7 +32,9 @@ public class TouchableView extends SurfaceView{
 	
 	public boolean onTouchEvent(MotionEvent event) {
 		// if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			bbActivity.explode(event); 
+		if (bbActivity != null){ 
+			bbActivity.explode(event);
+		}
 	//	}
 		return true;
 	}

@@ -3,6 +3,7 @@ package com.android.bouncybitcoin;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,14 @@ public class PriceFragment extends Fragment {
 	
 	TextView mListView;
 	String mItems;
+
+	private String currency;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setRetainInstance(true);
-		new FetchPriceTask().execute();
 	}
 	
 	@Override
@@ -27,7 +29,11 @@ public class PriceFragment extends Fragment {
 		return null;
 	}
 	
-	
+	public void fetchPriceInCurrency(String currency) {
+		this.currency = currency;
+		Log.d(TAG, "PriceFragment"  + currency);
+		new FetchPriceTask().execute();
+	}
 	
 	private class FetchPriceTask extends AsyncTask<Void,Void,String> {
 		@Override
@@ -37,7 +43,7 @@ public class PriceFragment extends Fragment {
 		
 		@Override
 		protected String doInBackground(Void... params) {
-			return new PriceFetcher().fetchPrice();
+			return new PriceFetcher().fetchPrice(currency);
 		}
 	}
 }
