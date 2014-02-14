@@ -22,17 +22,20 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int shape=0x7f020001;
     }
     public static final class id {
         public static final int accuracy_label=0x7f070000;
         public static final int bouncing_ball_btn=0x7f070006;
-        public static final int bouncy_bitcoin_surface=0x7f070008;
+        public static final int bouncing_ball_cny=0x7f070008;
+        public static final int bouncing_ball_eur=0x7f070007;
+        public static final int bouncing_ball_gbp=0x7f070009;
+        public static final int bouncy_bitcoin_surface=0x7f07000a;
         public static final int calibrate_button=0x7f070004;
         public static final int fragmentContainer=0x7f070005;
-        public static final int priceView=0x7f070007;
-        public static final int sensor_list=0x7f07000b;
-        public static final int sensor_name=0x7f070009;
-        public static final int sensor_supported=0x7f07000a;
+        public static final int sensor_list=0x7f07000d;
+        public static final int sensor_name=0x7f07000b;
+        public static final int sensor_supported=0x7f07000c;
         public static final int x_label=0x7f070001;
         public static final int y_label=0x7f070002;
         public static final int z_label=0x7f070003;

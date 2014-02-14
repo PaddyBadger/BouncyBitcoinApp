@@ -6,6 +6,7 @@ import static android.hardware.SensorManager.SENSOR_ACCELEROMETER;
 import static android.hardware.SensorManager.SENSOR_DELAY_GAME;
 
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -20,15 +21,15 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
-import android.view.SurfaceView;
 
 @SuppressWarnings("depreciation")
 public class BouncyBitcoinActivity extends SingleFragmentActivity implements Callback, SensorListener{
 	private static final String TAG="BBA";
 	private static final int BALL_RADIUS=13;
-	private SurfaceView surface;
+	private TouchableView surface;
 	private SurfaceHolder holder;
 	private Paint ballPaint;
 	private int ballNumber;
@@ -49,7 +50,6 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	public final int displayHeight() {
 		DisplayMetrics d = this.getResources().getDisplayMetrics();
 		int screenHeight = d.heightPixels;
-		Log.d(TAG, "height" + screenHeight);
 		return screenHeight / 7;
 	}
 	
@@ -86,7 +86,8 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		
 		setContentView(R.layout.home);
 		this.ballNumber = 0;
-		surface = (SurfaceView) findViewById(R.id.bouncy_bitcoin_surface);
+		surface = (TouchableView) findViewById(R.id.bouncy_bitcoin_surface);
+		surface.setBallsActivity(this);
 		holder = surface.getHolder();
 		surface.getHolder().addCallback(this);
 		
@@ -119,6 +120,8 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		for (int i = 0; i < ballNumber; i ++) {
 			models.get(i).setAccel(0, 0);
 		}
+		
+		// implement pausing on all models
 	}
 	
 	@Override 
@@ -244,4 +247,10 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 			}
 		}
 	}
-}
+	
+	public void explode(MotionEvent event) {
+		for (int i = 0; i < ballNumber; i ++) {
+			models.get(i).tryExplode(event);
+		}
+	}
+ }

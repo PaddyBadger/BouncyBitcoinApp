@@ -1,23 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragmentContainer"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center"
-    >
-    	
-    <Button
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:id="@+id/bouncing_ball_btn"
-    	android:text="BOUNCING BALL"/>  
-    	
-    <TextView 
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-		android:id="@+id/priceView" />
+    android:gravity="center">
     
-    <SurfaceView 
+    <LinearLayout
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" >
+    
+		 <Button
+	    	android:layout_width="wrap_content"
+	    	android:layout_weight="1"
+	    	android:layout_height="wrap_content"
+	    	android:id="@+id/bouncing_ball_btn"
+	    	android:height="30dp"
+	    	android:background="#FFFFFF"
+	    	android:text="USD" />	
+	    
+	    <Button
+	    	android:layout_width="wrap_content"
+	    	android:layout_weight="1"
+	    	android:layout_height="wrap_content"
+	    	android:id="@+id/bouncing_ball_eur"
+	    	android:height="30dp"
+	    	android:background="#FFFFFF"
+	    	android:text="EUR" />	
+
+    <Button
+        android:id="@+id/bouncing_ball_cny"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:height="30dp"
+        android:text="CNY" />
+
+    <Button
+        android:id="@+id/bouncing_ball_gbp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:height="30dp"
+        android:text="GBP" />
+    
+    </LinearLayout>
+    
+    <com.android.bouncybitcoin.TouchableView
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
 		android:id="@+id/bouncy_bitcoin_surface" />

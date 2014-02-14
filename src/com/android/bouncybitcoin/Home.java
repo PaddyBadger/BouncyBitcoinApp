@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener {
 	private static final String TAG="Home";
-	
-	private Button accelerometerBtn;
-	private Button sensorListBtn;
+
 	private Button bouncingBallBtn;
+	//private Button bouncingBallBtnGbp;
+	// private Button bouncingBallBtnEur;
+	// private Button bouncingBallBtnCny;
+
 	
     /** Called when the activity is first created. */
     @Override

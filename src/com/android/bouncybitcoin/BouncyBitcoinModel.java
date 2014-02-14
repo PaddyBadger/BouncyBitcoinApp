@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 
 public class BouncyBitcoinModel {
 	private static final String TAG = "Bouncy";
@@ -45,6 +46,7 @@ public class BouncyBitcoinModel {
 		
 		// values are in meters/second
 		private float velocityX, velocityY;
+		private double explodeX = 0, explodeY = 0;
 		
 		// typical values range from -10...10, but could be higher or lower if
 		// the user moves the phone rapidly
@@ -94,8 +96,8 @@ public class BouncyBitcoinModel {
 		public void setAccel(float ax, float ay) {
 			synchronized (LOCK) {
 				if (this.doesMove) {
-					this.accelX = (ax / 500) + textAttraction*(moveToY+displayWidth() - ballPixelX); // refector to constants
-					this.accelY = (ay / 500) - textAttraction*(800-(moveToX+20)*8/11 - ballPixelY);
+					this.accelX = (ax / 100) + textAttraction*(moveToY+displayWidth() - ballPixelX); // Reflector to constants
+					this.accelY = (ay / 100) - textAttraction*(800-(moveToX+20)*8/11 - ballPixelY);
 				} else {
 					this.accelX = ax;
 					this.accelY = ay;
@@ -169,6 +171,11 @@ public class BouncyBitcoinModel {
 	        lBallX += ((lVx * elapsedMs) / 1000) * pixelsPerMeter();
 	        lBallY += ((lVy * elapsedMs) / 1000) * pixelsPerMeter();
 	        
+	        lVx += explodeX;
+	        lVy += explodeY;
+	        explodeX = 0;
+	        explodeY = 0;
+	        
 	        boolean bouncedX = false;
 	        boolean bouncedY = false;
 	        if (this.doesMove){
@@ -224,5 +231,15 @@ public class BouncyBitcoinModel {
 	    
 	    public void setVibrator(Vibrator v) {
 	    	vibratorRef.set(v);
+	    }
+	    
+	    public void tryExplode(MotionEvent event) {
+	    	double xDist = ballPixelX - event.getX();
+	    	double yDist = ballPixelY - event.getY();
+	    	double dist = Math.sqrt(Math.pow(xDist,2d) + Math.pow(yDist,2d));
+	    	if (dist < 150) { 
+	    		explodeX = 10*(xDist / (Math.pow(dist, 0.8)));
+	    		explodeY = 10*(yDist /(Math.pow(dist, 0.8)));
+	    	}
 	    }
 }

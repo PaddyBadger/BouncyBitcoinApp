@@ -23,17 +23,11 @@ public class PriceFragment extends Fragment {
 	}
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		setupAdapter();
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {	
 		return null;
 	}
 	
-	void setupAdapter() {
-		if (getActivity() == null || mListView == null) return;
-		
-		new FetchPriceTask().execute();	
-		
-	}
+	
 	
 	private class FetchPriceTask extends AsyncTask<Void,Void,String> {
 		@Override

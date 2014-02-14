@@ -24,6 +24,9 @@ public class PriceFetcher {
 	public static final String TAG="PriceFetcher";
 	
 	private static final String USD = "https://api.bitcoinaverage.com/ticker/USD";
+	// private static final String GBP = "https://api.bitcoinaverage.com/ticker/GBP";
+	// private static final String CNY = "https://api.bitcoinaverage.com/ticker/CNY";
+	// private static final String EUR = "https://api.bitcoinaverage.com/ticker/EUR";
 	private static final String JSON_PRICE = "price";
 	
 	byte[] getUrlBytes(String urlSpec) throws IOException {
@@ -54,7 +57,7 @@ public class PriceFetcher {
 	}
 	
 	public String fetchPrice() {
-		final String last;
+		String last;
 		try {
 			String url = Uri.parse(USD).buildUpon().build().toString();
 			String jsonString = getUrl(url);
@@ -62,6 +65,8 @@ public class PriceFetcher {
 			
 			JSONObject jsonObject = (JSONObject) new JSONTokener(jsonString).nextValue();
 			last = jsonObject.getString("last");
+			float lastFormat = Float.parseFloat(last);
+			last = String.format("%.2f", lastFormat);
 			Log.i(TAG, "String: " + last);
 			
 		} catch (IOException ioe) {
