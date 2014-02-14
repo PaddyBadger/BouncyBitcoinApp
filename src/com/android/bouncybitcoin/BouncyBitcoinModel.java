@@ -62,6 +62,10 @@ public class BouncyBitcoinModel {
 		
 		private AtomicReference<Vibrator> vibratorRef =
 			new AtomicReference<Vibrator>();
+
+		private int segment;
+
+		private int digit;
 		
 		/**
 	     * When the ball hits an edge, multiply the velocity by the rebound.
@@ -242,4 +246,14 @@ public class BouncyBitcoinModel {
 	    		explodeY = 10*(yDist /(Math.pow(dist, 0.8)));
 	    	}
 	    }
+
+		public void setHomeSegment(int digit, int segment) {
+			this.digit = digit;
+			this.segment = segment;
+			
+			
+		}
+		public void toggleMoveState(boolean[][] validSeqs) {
+			this.doesMove = validSeqs[digit][segment];
+		}
 }

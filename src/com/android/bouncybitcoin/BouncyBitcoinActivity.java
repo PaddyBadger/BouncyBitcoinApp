@@ -29,7 +29,11 @@ import android.view.SurfaceHolder.Callback;
 @SuppressWarnings("depreciation")
 public class BouncyBitcoinActivity extends SingleFragmentActivity implements Callback, SensorListener{
 	private static final String TAG="BBA";
-	private static final int BALL_RADIUS=13;
+	private static final int PADDY_DPI = 320;
+	private static int BALL_RADIUS;
+	private static final int MAXSEGMENTS = 8;
+	private static final int PADDY_PHONE_HEIGHT = 1184;
+	private static final int PADDY_PHONE_WIDTH = 720;
 	private TouchableView surface;
 	private SurfaceHolder holder;
 	private Paint ballPaint;
@@ -39,10 +43,13 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	private Paint backgroundPaint;
 	private SensorManager sensorMgr;
 	private long lastSensorUpdate = -1;
+	private long lastPriceUpdate = -1;
 	public NumbersActivity nA;
 	private int SurfaceWidth;
 	private int SurfaceHeight;
 	private Random rand = new Random();
+	private boolean ballsSpawned;
+	private String currencyCode;
 	
 	public Fragment createFragment() {
 		
@@ -57,24 +64,60 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		int screenHeight = d.heightPixels;
 		return screenHeight;
 	}
+	public final int displayWidth() {
+		DisplayMetrics d = this.getResources().getDisplayMetrics();
+		int screenWidth = d.widthPixels;
+		return screenWidth;
+	}
+	
+	public final int displayDensity() {
+		DisplayMetrics d = this.getResources().getDisplayMetrics();
+		int screenDensity = d.densityDpi;
+		
+		return screenDensity;
+	}
+	
+	
 	
 	 public void displayPrice(String price) {
+		 
+		 if (ballsSpawned == false) {
+			 String eight = "88888888888.88";
+			 String eights = (String) eight.subSequence(14-price.length(),14);
 	    	 for (int i = 0; i < price.length(); i ++) {
-	    		 int[] segments = nA.numbers.get(price.charAt(i));
+	    		 
+	    		 
+	    		 
+	    		 int[] eightSegments = nA.numbers.get(eights.charAt(i));
 	    		 ballPaint = new Paint();
 	    		 ballPaint.setColor(randomColor());
-	    		 for (int j = 0; j < segments.length; j ++) {
-	    			 int[][] coords = nA.ballCoords(segments[j]);
+	    		 for (int j = 0; j < eightSegments.length; j ++) {
+	    			 int[][] coords = nA.ballCoords(eightSegments[j]);
 	    			 for (int k = 0; k < coords.length; k++) {
 	    				 BouncyBitcoinModel ball = new BouncyBitcoinModel(BALL_RADIUS, ballPaint);
-	    				 ball.setMove(coords[k][0] + (displayHeight() / (price.length() + 2)+20) * i, coords[k][1]); 
-					 ball.moveBall(rand.nextInt(SurfaceWidth), rand.nextInt(SurfaceHeight));
-					 ball.setSize(SurfaceWidth, SurfaceHeight);
-					 models.add(ball); 
-					 this.ballNumber++;			 
-				 }
-			 }
-		}	
+	    				 ball.setMove(20+((coords[k][0] + 180 * i)*displayHeight()/PADDY_PHONE_HEIGHT), coords[k][1]*displayWidth()/PADDY_PHONE_WIDTH); 
+	    				 ball.moveBall(rand.nextInt(SurfaceWidth), rand.nextInt(SurfaceHeight));
+	    				 ball.setSize(SurfaceWidth, SurfaceHeight);
+	    				 ball.setHomeSegment(i, eightSegments[j]);
+	    				 models.add(ball); 
+					 	this.ballNumber++;			 
+	    			 }
+	    		 }
+	    	 }
+	    	 
+	    	 this.ballsSpawned = true;
+		}
+		
+		boolean[][] validSeqs = new boolean[price.length()][MAXSEGMENTS];
+		for (int m = 0; m < price.length(); m ++) {
+			int[] segments = nA.numbers.get(price.charAt(m));
+			for (int j = 0; j < segments.length; j ++) {
+				validSeqs[m][segments[j]] = true;
+			}
+		}
+		for (int k = 0; k < ballNumber; k++){
+			models.get(k).toggleMoveState(validSeqs);
+		}
 	}
 	 
 	 private int randomColor() {
@@ -87,11 +130,14 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Intent intent = getIntent();
+		BALL_RADIUS = displayDensity()*13/PADDY_DPI;
 		
+		super.onCreate(savedInstanceState);
+		
+		Intent intent = getIntent();
+		currencyCode = intent.getStringExtra("Currency code");
 		PriceFragment fragment = (PriceFragment)singleFragment;
-		fragment.fetchPriceInCurrency(intent.getStringExtra("Currency code"));
+		fragment.fetchPriceInCurrency(currencyCode);
 		
 		setContentView(R.layout.home);
 		this.ballNumber = 0;
@@ -113,6 +159,8 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		}
 		
 		nA = new NumbersActivity();
+		
+		
 	}
 
 	@Override
@@ -213,6 +261,8 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	
 	private class GameLoop extends Thread {
 		private volatile boolean running = true;
+		private long loopCurTime;
+		private long lastPriceUpdate;
 		
 		public void run() {
 			while (running) {
@@ -226,6 +276,14 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 						models.get(i).updatePhysics();
 						
 					}
+					loopCurTime = System.currentTimeMillis();
+					if (lastPriceUpdate == -1 || loopCurTime - lastPriceUpdate > 30000) {
+						lastPriceUpdate = loopCurTime;
+
+						PriceFragment fragment = (PriceFragment)singleFragment;
+						fragment.fetchPriceInCurrency(currencyCode);
+					}
+					
 				} catch (InterruptedException ie) {
 					running = false;
 				}
@@ -245,7 +303,7 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	public void onSensorChanged(int sensor, float[] values) {
 		if (sensor == SENSOR_ACCELEROMETER) {
 			long curTime = System.currentTimeMillis();
-			
+		
 			if (lastSensorUpdate == -1 || (curTime - lastSensorUpdate) > 50) {
 				lastSensorUpdate = curTime;
 				
@@ -254,6 +312,7 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 					models.get(i).setAccel(values[DATA_X], values[DATA_Y]);
 				}
 			}
+			
 		}
 	}
 	
