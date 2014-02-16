@@ -95,7 +95,7 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	    			 int[][] coords = nA.ballCoords(eightSegments[j]);
 	    			 for (int k = 0; k < coords.length; k++) {
 	    				 BouncyBitcoinModel ball = new BouncyBitcoinModel(BALL_RADIUS, ballPaint);
-	    				 ball.setMove(20+((coords[k][0] + 180 * i)*displayHeight()/PADDY_PHONE_HEIGHT), coords[k][1]*displayWidth()/PADDY_PHONE_WIDTH); 
+	    				 ball.setMove(((coords[k][0] + 180 * i)*displayHeight()/PADDY_PHONE_HEIGHT), coords[k][1]*displayWidth()/PADDY_PHONE_WIDTH); 
 	    				 ball.moveBall(rand.nextInt(SurfaceWidth), rand.nextInt(SurfaceHeight));
 	    				 ball.setSize(SurfaceWidth, SurfaceHeight);
 	    				 ball.setHomeSegment(i, eightSegments[j]);
@@ -192,11 +192,6 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		
 		if (!accelSupported) {
 			sensorMgr.unregisterListener(this , SENSOR_ACCELEROMETER);
-		}
-		
-		Vibrator vibrator = (Vibrator) getSystemService(Activity.VIBRATOR_SERVICE);
-		for (int i = 0; i < ballNumber; i ++) {
-			models.get(i).setVibrator(vibrator);
 		}
 	}
 	
