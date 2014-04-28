@@ -1,21 +1,13 @@
 package com.android.bouncybitcoin;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.net.Uri;
 import android.util.Log;
@@ -24,7 +16,6 @@ public class PriceFetcher {
 	public static final String TAG="PriceFetcher";
 	
 	private static final String priceURL = "https://api.bitcoinaverage.com/ticker/";
-	private static final String JSON_PRICE = "price";
 	
 	byte[] getUrlBytes(String urlSpec) throws IOException {
 
@@ -61,13 +52,11 @@ public class PriceFetcher {
 			
 			String url = Uri.parse(priceURL + currency).buildUpon().build().toString();
 			String jsonString = getUrl(url);
-			Log.i(TAG, "Received " + jsonString);
 			
 			JSONObject jsonObject = (JSONObject) new JSONTokener(jsonString).nextValue();
 			last = jsonObject.getString("last");
 			float lastFormat = Float.parseFloat(last);
 			last = String.format("%.2f", lastFormat);
-			Log.i(TAG, "String: " + last);
 			
 		} catch (IOException ioe) {
 			Log.e(TAG, "Failed to fetch items", ioe);

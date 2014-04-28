@@ -1,18 +1,13 @@
 package com.android.bouncybitcoin;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class Home extends Activity implements OnClickListener {
-	private static final String TAG="Home";
 
 	private Button bouncingBallBtn;
 	private Button bouncingBallBtnGbp;
@@ -22,7 +17,7 @@ public class Home extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         
         bouncingBallBtn = (Button) findViewById(R.id.bouncing_ball_btn);
@@ -36,6 +31,7 @@ public class Home extends Activity implements OnClickListener {
         
         bouncingBallBtnCny = (Button) findViewById(R.id.bouncing_ball_cny);
         bouncingBallBtnCny.setOnClickListener(this);
+        
     } 
     
 	public void onClick(View v) {

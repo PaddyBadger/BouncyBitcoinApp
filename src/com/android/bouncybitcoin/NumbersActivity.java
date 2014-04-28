@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 public class NumbersActivity {
 	public HashMap<Character, int[]> numbers;
@@ -25,7 +24,7 @@ public class NumbersActivity {
 		 numbers.put('.', new int[]{7}); 
 	}
 	
-	public int[][] ballCoords(int segmentId) { // refactor measurements to constants
+	public int[][] ballCoords(int segmentId) { 
 		switch(segmentId) {
 		case 0: return new int[][]{{0,0},{35,0},{70,0},{105,0}};
 		case 1: return new int[][]{{0,0},{0,35},{0,70}};

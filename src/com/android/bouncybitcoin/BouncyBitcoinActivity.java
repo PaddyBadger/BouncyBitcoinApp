@@ -50,14 +50,13 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 	private Random rand = new Random();
 	private boolean ballsSpawned;
 	private String currencyCode;
+	private PriceFragment fragment;
 	
 	public Fragment createFragment() {
 		
 		Fragment currencyFragment = new PriceFragment();
 		return currencyFragment;	
 	}
-	
-	
 	
 	public final int displayHeight() {
 		DisplayMetrics d = this.getResources().getDisplayMetrics();
@@ -84,18 +83,18 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		 if (ballsSpawned == false) {
 			 String eight = "88888888888.88";
 			 String eights = (String) eight.subSequence(14-price.length(),14);
-	    	 for (int i = 0; i < price.length(); i ++) {
-	    		 
-	    		 
-	    		 
+	    	
+			 for (int i = 0; i < price.length(); i ++) { 
 	    		 int[] eightSegments = nA.numbers.get(eights.charAt(i));
 	    		 ballPaint = new Paint();
 	    		 ballPaint.setColor(randomColor());
+	    		 
 	    		 for (int j = 0; j < eightSegments.length; j ++) {
 	    			 int[][] coords = nA.ballCoords(eightSegments[j]);
+	    			 
 	    			 for (int k = 0; k < coords.length; k++) {
 	    				 BouncyBitcoinModel ball = new BouncyBitcoinModel(BALL_RADIUS, ballPaint);
-	    				 ball.setMove(((coords[k][0] + 180 * i)*displayHeight()/PADDY_PHONE_HEIGHT), coords[k][1]*displayWidth()/PADDY_PHONE_WIDTH); 
+	    				 ball.setMove(((coords[k][0] + 170 * i)*(displayHeight()/PADDY_PHONE_HEIGHT)-100), coords[k][1]*displayWidth()/PADDY_PHONE_WIDTH); 
 	    				 ball.moveBall(rand.nextInt(SurfaceWidth), rand.nextInt(SurfaceHeight));
 	    				 ball.setSize(SurfaceWidth, SurfaceHeight);
 	    				 ball.setHomeSegment(i, eightSegments[j]);
@@ -136,10 +135,11 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		
 		Intent intent = getIntent();
 		currencyCode = intent.getStringExtra("Currency code");
-		PriceFragment fragment = (PriceFragment)singleFragment;
+		fragment = (PriceFragment)singleFragment;
 		fragment.fetchPriceInCurrency(currencyCode);
 		
-		setContentView(R.layout.home);
+		setContentView(R.layout.activity_bouncy_bitcoin);
+	
 		this.ballNumber = 0;
 		surface = (TouchableView) findViewById(R.id.bouncy_bitcoin_surface);
 		surface.setBallsActivity(this);
@@ -152,11 +152,6 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		ballPaint = new Paint();
 		ballPaint.setColor(randomColor());
 		ballPaint.setAntiAlias(true);
-		
-		for (int i = 0; i < ballNumber; i ++) {
-			BouncyBitcoinModel model = new BouncyBitcoinModel(BALL_RADIUS, ballPaint); 
-			models.add(model);
-		}
 		
 		nA = new NumbersActivity();
 		
@@ -254,7 +249,7 @@ public class BouncyBitcoinActivity extends SingleFragmentActivity implements Cal
 		}
 	}
 	
-	private class GameLoop extends Thread {
+	public class GameLoop extends Thread {
 		private volatile boolean running = true;
 		private long loopCurTime;
 		private long lastPriceUpdate;

@@ -3,7 +3,11 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/fragmentContainer"
     >
-
-
+    
+    <com.android.bouncybitcoin.TouchableView
+		android:layout_width="fill_parent" 
+		android:layout_height="match_parent"
+		android:id="@+id/bouncy_bitcoin_surface" /> 
 </LinearLayout>
